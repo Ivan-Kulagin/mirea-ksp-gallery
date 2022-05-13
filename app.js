@@ -21,10 +21,10 @@ if (process.env.NODE_ENV === 'production') {
 
 async function start() {
   try {
-    // await mongoose.connect(config.get('mongoUri'), {
-    //   useNewUrlParser: true,
-    //   useUnifiedTopology: true
-    // })
+    await mongoose.connect(config.get('mongoUri'), {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    })
     app.listen(process.env.PORT || 5000, () => console.log(`App has been started...`))
   } catch (e) {
     console.log('Server Error', e.message)
