@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "npm run prod-client && npm run prod-server",
-    "prod-client": "cd client && npm install && npm run build",
+    "postinstall": "npm run build",
+    "prod-client": "cd client && npm install",
     "prod-server": "npm install && node app.js",
     "server": "nodemon app.js",
     "client": "npm run start --prefix client",
