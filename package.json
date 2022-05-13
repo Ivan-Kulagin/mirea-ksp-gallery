@@ -4,7 +4,7 @@
   "description": "Mern stack",
   "main": "app.js",
   "scripts": {
-    "start": "npm run client:build && npm run prod",
+    "start": "npm run client:install && npm run client:build && npm run prod",
     "server": "nodemon app.js",
     "client": "npm run start --prefix client",
     "client:install": "npm install --prefix client",
