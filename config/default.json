@@ -1,5 +1,4 @@
 {
-  "port": 5000,
   "jwtSecret": "omfT%YDGS{C,D_a0<}PlYUaRSh|&d6^9E%gL>3]GgbI'%DJVoXIbVer{X2aN}(L",
   "mongoUri": "mongodb://localhost:27017",
   "baseUrl": "http://localhost:5000"
