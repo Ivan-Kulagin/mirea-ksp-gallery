@@ -1,0 +1,6 @@
+{
+  "port": 5000,
+  "jwtSecret": "omfT%YDGS{C,D_a0<}PlYUaRSh|&d6^9E%gL>3]GgbI'%DJVoXIbVer{X2aN}(L",
+  "mongoUri": "mongodb+srv://memoryfr:trezordb@cluster0.god9p.mongodb.net/mirea-ksp-gallery?retryWrites=true&w=majority",
+  "baseUrl": "https://mirea-ksp-gallery.herokuapp.com/"
+}
