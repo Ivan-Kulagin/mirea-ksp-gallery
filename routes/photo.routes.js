@@ -7,7 +7,6 @@ const router = Router()
 
 router.post('/upload', auth, async (req, res) => {
     try {
-        const baseUrl = config.get('baseUrl')
         const {name, image} = req.body
         const existing = await Photo.findOne({ name })
 
@@ -34,7 +33,6 @@ router.post('/upload', auth, async (req, res) => {
 
 router.post('/delete', auth, async (req, res) => {
     try {
-        const baseUrl = config.get('baseUrl')
         const {photoId} = req.body
         const response = await Photo.deleteOne({"_id": ObjectId(photoId)})
         console.log(response)

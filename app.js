@@ -9,7 +9,6 @@ app.use(express.json({ limit: "30mb", extended: true }));
 app.use('/api/auth', require('./routes/auth.routes'))
 app.use('/api/profile', require('./routes/profile.routes'))
 app.use('/api/photo', require('./routes/photo.routes'))
-app.use('/t', require('./routes/redirect.routes'))
 
 if (process.env.NODE_ENV === 'production') {
   app.use('/', express.static(path.join(__dirname, 'client', 'build')))

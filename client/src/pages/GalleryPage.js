@@ -28,7 +28,7 @@ export const GalleryPage = () => {
     console.log(photos)
     return (
         <>
-            {!loading && <PhotosList photos={photos} />}
+            {!loading && <PhotosList photos={photos} isUserOwnPage={false} />}
         </>
     )
 }
