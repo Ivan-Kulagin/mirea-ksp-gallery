@@ -2,41 +2,121 @@ import React, {useContext, useEffect, useState} from 'react'
 import {useHttp} from '../hooks/http.hook'
 import {AuthContext} from '../context/AuthContext'
 import {useHistory} from 'react-router-dom'
+import {useMessage} from "../hooks/message.hook";
+import FileBase64 from 'react-file-base64'
 
 export const CreatePage = () => {
   const history = useHistory()
+  const message = useMessage()
   const auth = useContext(AuthContext)
   const {request} = useHttp()
-  const [link, setLink] = useState('')
+  const [profileName, setProfileName] = useState('')
+  const [profileEmail, setProfileEmail] = useState('')
+  const [item, setItem] = useState({ name: '', image: '' });
+  const getProfileData = async () => {
+    const data = await request('/api/profile', 'GET', null, {
+      Authorization: `Bearer ${auth.token}`
+    })
+    setProfileName(data.name)
+    setProfileEmail(data.email)
+  }
 
   useEffect(() => {
     window.M.updateTextFields()
+    getProfileData()
   }, [])
 
   const pressHandler = async event => {
     if (event.key === 'Enter') {
       try {
-        const data = await request('/api/link/generate', 'POST', {from: link}, {
+        await request('/api/profile/update', 'PATCH', {name: profileName}, {
           Authorization: `Bearer ${auth.token}`
         })
-        history.push(`/detail/${data.link._id}`)
       } catch (e) {}
     }
+  }
+
+  const onSubmitHandler = async event => {
+    event.preventDefault();
+    try {
+      const data = await request('/api/photo/upload', 'POST', {name: item.name, image: item.image}, {
+        Authorization: `Bearer ${auth.token}`
+      })
+      message(data.message)
+      history.push(`/`)
+    } catch (e) {}
   }
 
   return (
     <div className="row">
       <div className="col s8 offset-s2" style={{paddingTop: '2rem'}}>
-        <div className="input-field">
-          <input
-            placeholder="Вставьте ссылку"
-            id="link"
-            type="text"
-            value={link}
-            onChange={e => setLink(e.target.value)}
-            onKeyPress={pressHandler}
-          />
-          <label htmlFor="link">Введите ссылку</label>
+        <div>
+          <h5>Параметры профиля</h5>
+          <br />
+          <div className="input-field">
+            <input
+                placeholder="Введите ваше имя"
+                id="name-field"
+                type="text"
+                value={profileName}
+                onChange={e => setProfileName(e.target.value)}
+                onKeyPress={pressHandler}
+            />
+            <label htmlFor="email-field">Имя автора</label>
+          </div>
+          <div className="input-field">
+            <input
+                placeholder="Адрес электронной почты"
+                id="name-field"
+                type="text"
+                value={profileEmail}
+                disabled={true}
+            />
+            <label htmlFor="email-field">Адрес электронной почты</label>
+          </div>
+        </div>
+        <br />
+        <div>
+          <h5>Добавить фотографию</h5>
+          <br />
+          <form action="" onSubmit={onSubmitHandler}>
+            <div className="input-field">
+              <input
+                  placeholder="Расскажите, что изображено на вашей фотографии"
+                  id="description"
+                  type="text"
+                  onChange={e => setItem({ ...item, name: e.target.value })}
+              />
+              <label htmlFor="description">Описание фотографии</label>
+            </div>
+
+            <div className="file-field input-field">
+              <div className="btn">
+                <span>Выбрать фото</span>
+                <input type="file"/>
+              </div>
+              <div className="file-path-wrapper">
+                <input className="file-path validate" type="text"
+                       placeholder="Фотография"/>
+                <FileBase64
+                    multiple={ false }
+                    onDone={({base64}) => setItem({ ...item, image: base64 })}
+                />
+              </div>
+            </div>
+            <div style={{display: "flex"}}>
+              <div>
+                <label>
+                  <input type="checkbox" className="filled-in"/>
+                  <span>Опубликовать</span>
+                </label>
+              </div>
+              <div style={{width: "100%"}}></div>
+              <div className="right-align">
+                <button className="btn">submit</button>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>
