@@ -49,6 +49,7 @@ class Modal extends Component {
                         modal-fixed-footer to the "modal" div*/}
                     <div className="modal-content">
                         <h4>{this.props.photo.name}</h4>
+                        <span className="blue-grey-text">Эта фотография опубликована пользователем {this.props.photo.user_data[0].name}</span>
                         <p>{this.props.photo.description}</p>
                         <img src={this.props.photo.image}
                              style={{maxHeight: 600, display: "block", marginLeft: "auto", marginRight: "auto"}}

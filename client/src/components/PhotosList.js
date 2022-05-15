@@ -2,11 +2,14 @@ import React, {useContext} from 'react'
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 import {AuthContext} from '../context/AuthContext'
 import {useHttp} from '../hooks/http.hook'
+import { useHistory } from "react-router-dom";
 import Modal from "./Modal";
+import EditDetailsModal from "./EditDetailsModal";
 
 export const PhotosList = ({ photos, isUserOwnPage }) => {
     const {token, userId} = useContext(AuthContext)
     const {request} = useHttp()
+    const history = useHistory()
     if (!photos.length) {
         return <p className="center">Фотографий пока нет</p>
     }
@@ -14,13 +17,24 @@ export const PhotosList = ({ photos, isUserOwnPage }) => {
     const deleteHandler = async (value) => {
         try {
             console.log(value)
-            await request('/api/photo/delete', 'POST', {photoId: value},{
+            await request('/api/photo/delete', 'DELETE', {photoId: value},{
                 Authorization: `Bearer ${token}`
             })
+            history.push('/gallery')
         } catch (e) {}
     }
 
-    const editHandler = () => {console.log('edit')}
+    const editHandler = async (data) => {
+        try {
+            // console.log(data)
+            await request('/api/photo/update', 'PATCH',
+                {id: data.photoId, name: data.photoName, description: data.photoDescription, public: data.photoPublic},
+                {Authorization: `Bearer ${token}`}
+            )
+            console.log(history)
+            history.push('/gallery')
+        } catch (e) {}
+    }
 
     return (
         <ResponsiveMasonry
@@ -34,12 +48,11 @@ export const PhotosList = ({ photos, isUserOwnPage }) => {
                         <div className="card-content">
                             <span className="card-title black-text text-accent-3">{photo.name}</span>
                             <p className="truncate">{photo.description}</p>
+                            <span className="blue-grey-text text-lighten-2">Опубликовал {photo.user_data[0].name}</span>
                         </div>
                         {(photo.user_data[0]._id === userId) && (isUserOwnPage) &&
                         <div className="card-action" style={{display: 'flex'}}>
-                            <button className="btn blue darken-4 waves-effect waves-light btn-small"
-                                    onClick={() => editHandler(photo._id)}> Изменить
-                            </button>
+                            <EditDetailsModal changeCallback={editHandler} photo={photo}/>
 
                             <button className="btn red darken-4 waves-effect waves-light btn-small" style={{marginLeft: 8}}
                                     onClick={() => deleteHandler(photo._id)}> Удалить

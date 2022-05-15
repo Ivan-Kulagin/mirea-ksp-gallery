@@ -43,7 +43,7 @@ export const CreatePage = () => {
           {name: item.name, description: item.description, image: item.image, public: item.public},
           {Authorization: `Bearer ${auth.token}`})
       message(data.message)
-      history.push(`/`)
+      history.push('/gallery')
     } catch (e) {}
   }
 
@@ -91,10 +91,11 @@ export const CreatePage = () => {
             </div>
 
             <div className="input-field">
-              <input
+              <textarea
                   placeholder="Расскажите, что изображено на вашей фотографии"
                   id="description"
                   type="text"
+                  className="materialize-textarea"
                   onChange={e => setItem({ ...item, description: e.target.value })}
               />
               <label htmlFor="description">Описание фотографии</label>
@@ -125,7 +126,7 @@ export const CreatePage = () => {
               </div>
               <div style={{width: "100%"}}></div>
               <div className="right-align">
-                <button className="btn">submit</button>
+                <button className="btn">Отправить</button>
               </div>
             </div>
           </form>

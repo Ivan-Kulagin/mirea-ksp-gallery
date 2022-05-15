@@ -3,6 +3,7 @@ const config = require('config')
 const Photo = require('../models/Photo')
 const auth = require('../middleware/auth.middleware')
 const {ObjectId} = require("mongoose/lib/types");
+const User = require("../models/User");
 const router = Router()
 
 router.put('/upload', auth, async (req, res) => {
@@ -28,12 +29,22 @@ router.put('/upload', auth, async (req, res) => {
     }
 })
 
+router.patch('/update', auth, async (req, res) => {
+    try {
+        const {id, name, description, public} = req.body
+        const photo = await Photo.findByIdAndUpdate(id, { name: name, description: description, public: public })
+        res.status(200).json({ photo })
+    } catch (e) {
+        res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' })
+    }
+})
 
-router.post('/delete', auth, async (req, res) => {
+
+router.delete('/delete', auth, async (req, res) => {
     try {
         const {photoId} = req.body
         const response = await Photo.deleteOne({"_id": ObjectId(photoId)})
-        console.log(response)
+        // console.log(response)
         res.status(200).json({ message: 'Фотография удалена' })
     } catch (e) {
         res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' })
@@ -43,7 +54,7 @@ router.post('/delete', auth, async (req, res) => {
 
 router.get('/', auth, async (req, res) => {
     try {
-        console.log(req.user.userId)
+        // console.log(req.user.userId)
         const photos = await Photo.aggregate([
             { $match: {owner: ObjectId(req.user.userId)} },
             {
