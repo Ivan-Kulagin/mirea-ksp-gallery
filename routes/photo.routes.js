@@ -5,17 +5,15 @@ const auth = require('../middleware/auth.middleware')
 const {ObjectId} = require("mongoose/lib/types");
 const router = Router()
 
-router.post('/upload', auth, async (req, res) => {
+router.put('/upload', auth, async (req, res) => {
     try {
-        const {name, image} = req.body
-        const existing = await Photo.findOne({ name })
+        console.log(req.body.description)
+        const {image, name, description, public} = req.body
 
         if (image.includes('data:image')) {
-            if (existing) {
-                return res.json({ photo: existing })
-            }
+
             const photo = new Photo({
-                name, image, owner: req.user.userId
+                name, description, image, public, owner: req.user.userId
             })
 
             await photo.save(function(err, doc) {
@@ -66,7 +64,7 @@ router.get('/', auth, async (req, res) => {
 router.get('/public', auth, async (req, res) => {
     try {
         const photos = await Photo.aggregate([
-            { $match: {private: true}},
+            { $match: {public: true}},
             {
                 $lookup: {
                     from: 'users',

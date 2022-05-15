@@ -3,9 +3,8 @@ import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
 import {AuthContext} from '../context/AuthContext'
 import {useHttp} from '../hooks/http.hook'
 import Modal from "./Modal";
-import {Link} from 'react-router-dom'
 
-export const PhotosList = ({ photos }) => {
+export const PhotosList = ({ photos, isUserOwnPage }) => {
     const {token, userId} = useContext(AuthContext)
     const {request} = useHttp()
     if (!photos.length) {
@@ -36,7 +35,7 @@ export const PhotosList = ({ photos }) => {
                             <span className="card-title black-text text-accent-3">{photo.name}</span>
                             <p className="truncate">{photo.description}</p>
                         </div>
-                        {(photo.user_data[0]._id === userId) &&
+                        {(photo.user_data[0]._id === userId) && (isUserOwnPage) &&
                         <div className="card-action" style={{display: 'flex'}}>
                             <button className="btn blue darken-4 waves-effect waves-light btn-small"
                                     onClick={() => editHandler(photo._id)}> Изменить

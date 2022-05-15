@@ -28,7 +28,7 @@ export const PhotosPage = () => {
 
     return (
         <>
-            {!loading && <PhotosList photos={photos} />}
+            {!loading && <PhotosList photos={photos} isUserOwnPage={true} />}
         </>
     )
 }

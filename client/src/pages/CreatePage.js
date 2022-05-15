@@ -12,7 +12,7 @@ export const CreatePage = () => {
   const {request} = useHttp()
   const [profileName, setProfileName] = useState('')
   const [profileEmail, setProfileEmail] = useState('')
-  const [item, setItem] = useState({ name: '', image: '' });
+  const [item, setItem] = useState({ name: '', description: '', image: '', public: false });
   const getProfileData = async () => {
     const data = await request('/api/profile', 'GET', null, {
       Authorization: `Bearer ${auth.token}`
@@ -39,9 +39,9 @@ export const CreatePage = () => {
   const onSubmitHandler = async event => {
     event.preventDefault();
     try {
-      const data = await request('/api/photo/upload', 'POST', {name: item.name, image: item.image}, {
-        Authorization: `Bearer ${auth.token}`
-      })
+      const data = await request('/api/photo/upload', 'PUT',
+          {name: item.name, description: item.description, image: item.image, public: item.public},
+          {Authorization: `Bearer ${auth.token}`})
       message(data.message)
       history.push(`/`)
     } catch (e) {}
@@ -82,10 +82,20 @@ export const CreatePage = () => {
           <form action="" onSubmit={onSubmitHandler}>
             <div className="input-field">
               <input
+                  placeholder="Подпишите фотографию"
+                  id="name"
+                  type="text"
+                  onChange={e => setItem({ ...item, name: e.target.value })}
+              />
+              <label htmlFor="name">Подпись к фотографии</label>
+            </div>
+
+            <div className="input-field">
+              <input
                   placeholder="Расскажите, что изображено на вашей фотографии"
                   id="description"
                   type="text"
-                  onChange={e => setItem({ ...item, name: e.target.value })}
+                  onChange={e => setItem({ ...item, description: e.target.value })}
               />
               <label htmlFor="description">Описание фотографии</label>
             </div>
@@ -107,7 +117,9 @@ export const CreatePage = () => {
             <div style={{display: "flex"}}>
               <div>
                 <label>
-                  <input type="checkbox" className="filled-in"/>
+                  <input type="checkbox" onChange={e => setItem({...item, public: e.target.checked})}
+                         className="filled-in"
+                  />
                   <span>Опубликовать</span>
                 </label>
               </div>

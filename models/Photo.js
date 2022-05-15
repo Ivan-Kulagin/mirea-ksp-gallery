@@ -5,7 +5,7 @@ const schema = new Schema({
   description: {type: String, required: false},
   image: {type: String},
   date: {type: Date, default: Date.now},
-  private: {type: Boolean, default: true, required: true},
+  public: {type: Boolean, default: false, required: true},
   owner: {type: Types.ObjectId, ref: 'User'}
 })
 

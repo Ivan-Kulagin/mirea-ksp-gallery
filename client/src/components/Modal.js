@@ -5,18 +5,10 @@ import "materialize-css/dist/css/materialize.min.css";
 class Modal extends Component {
     componentDidMount() {
         const options = {
-            onOpenStart: () => {
-                console.log("Open Start");
-            },
-            onOpenEnd: () => {
-                console.log("Open End");
-            },
-            onCloseStart: () => {
-                console.log("Close Start");
-            },
-            onCloseEnd: () => {
-                console.log("Close End");
-            },
+            onOpenStart: () => {},
+            onOpenEnd: () => {},
+            onCloseStart: () => {},
+            onCloseEnd: () => {},
             inDuration: 250,
             outDuration: 250,
             opacity: 0.5,
@@ -59,7 +51,7 @@ class Modal extends Component {
                         <h4>{this.props.photo.name}</h4>
                         <p>{this.props.photo.description}</p>
                         <img src={this.props.photo.image}
-                             style={{maxHeight: 650, display: "block", marginLeft: "auto", marginRight: "auto"}}
+                             style={{maxHeight: 600, display: "block", marginLeft: "auto", marginRight: "auto"}}
                         />
                     </div>
                     <div className="modal-footer">
